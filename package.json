@@ -1,0 +1,24 @@
+{
+  "name": "Scraper_Puppeteer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HolaSoyGonzalo/Scraper_Puppeteer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HolaSoyGonzalo/Scraper_Puppeteer/issues"
+  },
+  "homepage": "https://github.com/HolaSoyGonzalo/Scraper_Puppeteer#readme",
+  "dependencies": {
+    "puppeteer": "^8.0.0"
+  }
+}
