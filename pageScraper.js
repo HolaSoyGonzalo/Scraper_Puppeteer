@@ -15,7 +15,24 @@ const scraperObject = {
         return links;
       }
     );
-    console.log(urls);
+    for (url of urls) {
+      await page.goto(url);
+      await page.waitForSelector(".container");
+      let material = await page.$$eval(
+        "div.summary.entry-summary",
+        (elements) => {
+          return elements.map((el) => {
+            return {
+              product: el.querySelector("h1").textContent.trim(),
+              material: el.querySelector(
+                "div.clearfix > div.woocommerce-product-details__short-description > p"
+              ).textContent,
+            };
+          });
+        }
+      );
+      console.log(material);
+    }
   },
 };
 
