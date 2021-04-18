@@ -5,9 +5,6 @@ const scraperObject = {
     console.log(`Navigating to ${this.url}...`);
     // Navigate to the selected page
     await page.goto(this.url);
-    // await page.addScriptTag({
-    //   url: "https://code.jquery.com/jquery-3.2.1.min.js",
-    // });
     // Wait for the required DOM to be rendered
     await page.waitForSelector(".container");
     let urls = await page.$$eval(
