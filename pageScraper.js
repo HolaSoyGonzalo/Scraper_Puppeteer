@@ -1,3 +1,5 @@
+const materials = require("./materials");
+
 const scraperObject = {
   url: "https://blu-verd.com/product-category/women/",
   async scraper(browser) {
@@ -18,12 +20,12 @@ const scraperObject = {
     for (url of urls) {
       await page.goto(url);
       await page.waitForSelector(".container");
-      let material = await page.$$eval(
+      let products = await page.$$eval(
         "div.summary.entry-summary",
         (elements) => {
           return elements.map((el) => {
             return {
-              product: el.querySelector("h1").textContent.trim(),
+              name: el.querySelector("h1").textContent.trim(),
               material: el.querySelector(
                 "div.clearfix > div.woocommerce-product-details__short-description > p"
               ).textContent,
@@ -31,7 +33,15 @@ const scraperObject = {
           });
         }
       );
-      console.log(material);
+      products = products.map((product) => {
+        return {
+          name: product.name,
+          material:
+            materials[product.material.split("%")[1].toLowerCase().trim()] ||
+            null,
+        };
+      });
+      console.log(products);
     }
   },
 };
