@@ -31,7 +31,7 @@ module.exports = {
   "organic cotton": "organic_cotton",
   "organic certified cotton": "organic_cotton",
   "organic fairtrade certified cotton": "organic_cotton",
-  "100% organic undyed cotton": "organic_cotton",
+  "organic undyed cotton": "organic_cotton",
   "organic denim": "organic_cotton",
   "cotton (organic)": "organic_cotton",
   "certified organic cotton": "organic_cotton",
