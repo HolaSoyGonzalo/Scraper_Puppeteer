@@ -1,15 +1,20 @@
 const materials = require("./materials");
 
 const scraperObject = {
-  url: "https://blu-verd.com/product-category/women/",
-  async scraper(browser) {
+  url: [
+    "https://blu-verd.com/product-category/women/",
+    "https://www.lenversfashion.com/collections/organic-cotton?page=",
+    "https://www.lenversfashion.com/collections/hemp?page=",
+  ],
+  async scraper_blu(browser) {
     let page = await browser.newPage();
-    console.log(`Navigating to ${this.url}...`);
+    console.log(`Navigating to ${this.url[0]}...`);
 
-    let nextUrl = this.url;
+    let nextUrl = this.url[0];
     let hasNext = true;
 
     let urls = [];
+    let scrapedData = [];
 
     while (hasNext) {
       // Navigate to the selected page
@@ -60,18 +65,21 @@ const scraperObject = {
             null,
         };
       });
+      scrapedData.push(products);
       console.log(products);
     }
+    return scrapedData;
   },
-  async scrapeOther(browser, url) {
-    let page = await browser.newPage();
-    console.log(`Navigating to ${url}...`);
 
-    let nextUrl = url;
+  async scraper_lenversCotton(browser) {
+    let page = await browser.newPage();
+    console.log(`Navigating to ${this.url[1]}...`);
+
+    let nextUrl = this.url[1];
     let hasNext = true;
 
     let urls = [];
-
+    let scrapedData = [];
     while (hasNext) {
       // Navigate to the selected page
       await page.goto(nextUrl);
@@ -98,18 +106,24 @@ const scraperObject = {
     // console.log(urls);
     for (url of urls) {
       await page.goto(url);
-      await page.waitForSelector("head");
-      let products = await page.$$eval("head", (elements) => {
-        return elements.map((el) => {
-          return {
-            name: el.querySelector("title").textContent.trim(),
-            material: el.querySelector("title").textContent.trim(),
-          };
-        });
-      });
-      products.map((product) => {
-        extractMaterial(product.material);
-      });
+      await page.waitForSelector("body");
+      let products = await page.$$eval(
+        "div.proBoxInfo.boxinfo_stick_parentx.col-xs-12.col-sm-12.col-md-5",
+        (elements) => {
+          return elements.map((el) => {
+            return {
+              name: el.querySelector("h1").textContent.trim(),
+              material: el
+                .querySelector("div:nth-child(2)")
+                .textContent.trim()
+                .substring(0, 14),
+            };
+          });
+        }
+      );
+      // products.map((product) => {
+      //   extractMaterial(product.material);
+      // });
       // products = products.map((product) => {
       //   return {
       //     name: product.name,
@@ -118,8 +132,76 @@ const scraperObject = {
       //       null,
       //   };
       // });
-      // console.log(products);
+      scrapedData.push(products);
+      console.log(products);
     }
+    return scrapedData;
+  },
+
+  async scraper_lenversHemp(browser) {
+    let page = await browser.newPage();
+    console.log(`Navigating to ${this.url[2]}...`);
+
+    // let nextUrl = this.url[2];
+    // let hasNext = true;
+
+    let urls = [];
+    let scrapedData = [];
+    // Navigate to the selected page
+    await page.goto(this.url[2]);
+    // Wait for the required DOM to be rendered
+    await page.waitForSelector("#velaProList");
+    let currentPageUrls = await page.$$eval("div.proHImage", (links) => {
+      // Extract the links from the data
+      links = links.map((el) => el.querySelector("a").href);
+      return links;
+    });
+    urls.push(...currentPageUrls);
+    // let nextPage = await page.$$eval("ul.pagination", (navbar) => {
+    //   return navbar.map((navEl) => {
+    //     let nextPageUrlHolder = navEl.querySelector(
+    //       "ul.pagination > li.pagiNext > a"
+    //     );
+    //     return nextPageUrlHolder === null ? null : nextPageUrlHolder.href;
+    //   });
+    // });
+    // nextUrl = nextPage[0];
+    // hasNext = nextUrl !== null;
+    // console.log(nextUrl);
+
+    // console.log(urls);
+    for (url of urls) {
+      await page.goto(url);
+      await page.waitForSelector("body");
+      let products = await page.$$eval(
+        "div.proBoxInfo.boxinfo_stick_parentx.col-xs-12.col-sm-12.col-md-5",
+        (elements) => {
+          return elements.map((el) => {
+            return {
+              name: el.querySelector("h1").textContent.trim(),
+              material: el
+                .querySelector("div:nth-child(2)")
+                .textContent.trim()
+                .substring(0, 4),
+            };
+          });
+        }
+      );
+      // products.map((product) => {
+      //   extractMaterial(product.material);
+      // });
+      // products = products.map((product) => {
+      //   return {
+      //     name: product.name,
+      //     material:
+      //       materials[product.material.split("%")[1].toLowerCase().trim()] ||
+      //       null,
+      //   };
+      // });
+      scrapedData.push(products);
+      console.log(products);
+    }
+    return scrapedData;
   },
 };
 
