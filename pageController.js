@@ -20,19 +20,21 @@ async function scrapeAll(browserInstance) {
     //   "scrapedData"
     // );
 
-    // fs.writeFile(
-    //   "data.csv",
-    //   JSON.stringify(scrapedData),
-    //   "utf8",
-    //   function (err) {
-    //     if (err) {
-    //       return console.log(err);
-    //     }
-    //     console.log(
-    //       "The data has been scraped and saved successfully! View it at './data.json'"
-    //     );
-    //   }
-    // );
+    await browser.close();
+
+    fs.writeFile(
+      "data.csv",
+      JSON.stringify(scrapedData),
+      "utf8",
+      function (err) {
+        if (err) {
+          return console.log(err);
+        }
+        console.log(
+          "The data has been scraped and saved successfully! View it at './data.json'"
+        );
+      }
+    );
   } catch (err) {
     console.log("Could not resolve the browser instance => ", err);
   }
