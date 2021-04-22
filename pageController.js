@@ -1,13 +1,6 @@
 const pageScraper = require("./pageScraper");
-const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+
 const fs = require("fs");
-const csvWriter = createCsvWriter({
-  path: `${__dirname}/products.csv`,
-  header: [
-    { id: "name", title: "name" },
-    { id: "material", title: "material" },
-  ],
-});
 
 async function scrapeAll(browserInstance) {
   let browser;
@@ -26,13 +19,6 @@ async function scrapeAll(browserInstance) {
     //   browser,
     //   "scrapedData"
     // );
-
-    await browser.close();
-    await csvWriter
-      .writeRecords(scrapedData) // returns a promise
-      .then(() => {
-        console.log("...Done");
-      });
 
     // fs.writeFile(
     //   "data.csv",
