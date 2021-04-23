@@ -7,18 +7,18 @@ async function scrapeAll(browserInstance) {
   try {
     browser = await browserInstance;
     let scrapedData = {};
-    scrapedData["lenvers"] = await pageScraper.scraper_lenversHemp(
+    scrapedData["lenvers_Hemp"] = await pageScraper.scraper_lenversHemp(
       browser,
       "scrapedData"
     );
-    scrapedData["lenvers"] = await pageScraper.scraper_lenversCotton(
-      browser,
-      "scrapedData"
-    );
-    scrapedData["blu-verd"] = await pageScraper.scraper_blu(
-      browser,
-      "scrapedData"
-    );
+    // scrapedData["lenvers_Cotton"] = await pageScraper.scraper_lenversCotton(
+    //   browser,
+    //   "scrapedData"
+    // );
+    // scrapedData["blu-verd"] = await pageScraper.scraper_blu(
+    //   browser,
+    //   "scrapedData"
+    // );
 
     await browser.close();
 

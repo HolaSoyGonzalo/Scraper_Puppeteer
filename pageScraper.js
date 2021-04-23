@@ -30,6 +30,7 @@ const scraperObject = {
         }
       );
       urls.push(...currentPageUrls);
+      // You are going to check if this button exist first, so you know if there really is a next page.
       let nextPage = await page.$$eval("ul.page-numbers", (navbar) => {
         return navbar.map((navEl) => {
           return navEl.querySelector("ul.page-numbers > li > a.next") === null
@@ -42,11 +43,14 @@ const scraperObject = {
       console.log(nextUrl);
     }
     for (url of urls) {
+      //Go to single product page
       await page.goto(url);
+      //Let's now select the div containing the single product's info we are looking for
       await page.waitForSelector(".container");
       let products = await page.$$eval(
         "div.summary.entry-summary",
         (elements) => {
+          //Now we map "name", "material" for each product we are cycling for
           return elements.map((el) => {
             return {
               name: el.querySelector("h1").textContent.trim(),
@@ -57,6 +61,7 @@ const scraperObject = {
           });
         }
       );
+      //Here instead we compare the results from scraping with "Material.js" map, containing all the allowed materials
       products = products.map((product) => {
         return {
           name: product.name,
@@ -65,6 +70,7 @@ const scraperObject = {
             null,
         };
       });
+      //Push the Data and create single array for every cycle (Not the behaviour we are looking for, that's why .csv files are being generated empty)
       scrapedData.push(products);
       console.log(products);
     }
@@ -91,6 +97,7 @@ const scraperObject = {
         return links;
       });
       urls.push(...currentPageUrls);
+
       let nextPage = await page.$$eval("ul.pagination", (navbar) => {
         return navbar.map((navEl) => {
           let nextPageUrlHolder = navEl.querySelector(
@@ -185,9 +192,9 @@ const scraperObject = {
           });
         }
       );
-      products.map((product) => {
-        extractMaterial(product.material);
-      });
+      // products.map((product) => {
+      //   extractMaterial(product.material);
+      // });
       products = products.map((product) => {
         return {
           name: product.name,
@@ -201,11 +208,11 @@ const scraperObject = {
   },
 };
 
-const extractMaterial = (string) => {
-  let results = Object.keys(materials).filter((material) => {
-    return string.toLowerCase().includes(material);
-  });
-  console.log(results);
-};
+// const extractMaterial = (string) => {
+//   let results = Object.keys(materials).filter((material) => {
+//     return string.toLowerCase().includes(material);
+//   });
+//   console.log(results);
+// };
 
 module.exports = scraperObject;
