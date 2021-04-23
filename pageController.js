@@ -6,24 +6,24 @@ async function scrapeAll(browserInstance) {
   let browser;
   try {
     browser = await browserInstance;
-    let scrapedData = [];
+    let scrapedData = {};
     scrapedData["lenvers"] = await pageScraper.scraper_lenversHemp(
       browser,
       "scrapedData"
     );
-    // scrapedData["lenvers"] = await pageScraper.scraper_lenversCotton(
-    //   browser,
-    //   "scrapedData"
-    // );
-    // scrapedData["blu-verd"] = await pageScraper.scraper_blu(
-    //   browser,
-    //   "scrapedData"
-    // );
+    scrapedData["lenvers"] = await pageScraper.scraper_lenversCotton(
+      browser,
+      "scrapedData"
+    );
+    scrapedData["blu-verd"] = await pageScraper.scraper_blu(
+      browser,
+      "scrapedData"
+    );
 
     await browser.close();
 
     fs.writeFile(
-      "data.csv",
+      "data.json",
       JSON.stringify(scrapedData),
       "utf8",
       function (err) {

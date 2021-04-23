@@ -124,14 +124,12 @@ const scraperObject = {
       // products.map((product) => {
       //   extractMaterial(product.material);
       // });
-      // products = products.map((product) => {
-      //   return {
-      //     name: product.name,
-      //     material:
-      //       materials[product.material.split("%")[1].toLowerCase().trim()] ||
-      //       null,
-      //   };
-      // });
+      products = products.map((product) => {
+        return {
+          name: product.name,
+          material: materials[product.material.toLowerCase().trim()] || null,
+        };
+      });
       scrapedData.push(products);
       console.log(products);
     }
@@ -187,17 +185,15 @@ const scraperObject = {
           });
         }
       );
-      // products.map((product) => {
-      //   extractMaterial(product.material);
-      // });
-      // products = products.map((product) => {
-      //   return {
-      //     name: product.name,
-      //     material:
-      //       materials[product.material.split("%")[1].toLowerCase().trim()] ||
-      //       null,
-      //   };
-      // });
+      products.map((product) => {
+        extractMaterial(product.material);
+      });
+      products = products.map((product) => {
+        return {
+          name: product.name,
+          material: materials[product.material.toLowerCase().trim()] || null,
+        };
+      });
       scrapedData.push(products);
       console.log(products);
     }
